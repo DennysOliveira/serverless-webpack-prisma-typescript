@@ -1,0 +1,30 @@
+org: scraperapi
+app: scraper-api
+service: crawler
+
+plugins:
+  - serverless-webpack
+  - serverless-webpack-prisma
+
+package:
+  individually: true
+
+custom:
+  webpack:
+    packager: npm
+    includeModules: true
+    # packagerOptions:
+    #   scripts:
+    #     - prisma generate
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  environment:
+    JWT_SECRET: ${env:JWT_SECRET, param:JWT_SECRET, 'secret'}
+    JWT_REFRESH_SECRET: ${env:JWT_REFRESH_SECRET, param:JWT_REFRESH_SECRET, 'refreshSecret'}
+    DATABASE_URL: ${env:DATABASE_URL, param:DATABASE_URL, 'mysql://root@127.0.0.1:3309/scraper-api'}
+
+functions:
+  myFunction:
+    handler: src/myFunction.handler
