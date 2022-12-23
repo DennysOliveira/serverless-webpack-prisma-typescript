@@ -1,10 +1,12 @@
 org: scraperapi
 app: scraper-api
 service: crawler
+useDotenv: true
 
 plugins:
   - serverless-webpack
   - serverless-webpack-prisma
+  - serverless-offline
 
 package:
   individually: true
@@ -28,3 +30,7 @@ provider:
 functions:
   myFunction:
     handler: src/myFunction.handler
+    events:
+      - http:
+          path: /
+          method: get
