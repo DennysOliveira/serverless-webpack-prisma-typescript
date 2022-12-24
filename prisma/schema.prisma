@@ -13,7 +13,7 @@ datasource db {
 model sitemap {
   id          Int       @id @default(autoincrement())
   name        String?   @db.VarChar(50)
-  url         String?   @db.VarChar(250)
+  url         String    @db.VarChar(250)
   enabled     Boolean?  @default(true)
   lastRun     DateTime? @map("last_run")
   nextRun     DateTime  @default(now()) @map("next_run")
