@@ -108,3 +108,5 @@ dist
 .env.dev
 
 .webpack
+
+chrome
