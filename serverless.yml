@@ -24,7 +24,7 @@ provider:
   runtime: nodejs16.x
   environment:
     JWT_SECRET: ${param:JWT_SECRET, env:JWT_SECRET, 'secret'}
-    JWT_REFRESH_SECRET: ${param:JWT_REFRESH_SECRET, env:JWT_REFRESH_SECRET, , 'refreshSecret'}
+    JWT_REFRESH_SECRET: ${param:JWT_REFRESH_SECRET, env:JWT_REFRESH_SECRET, 'refreshSecret'}
     DATABASE_URL: ${param:DATABASE_URL, env:DATABASE_URL, 'mysql://root@127.0.0.1:3309/scraper-api'}
 
 
