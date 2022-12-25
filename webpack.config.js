@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { puppeteer } from 'puppeteer';
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const slsw = require('serverless-webpack')
@@ -10,7 +11,7 @@ module.exports = {
   entry: slsw.lib.entries,
   externals: [
     nodeExternals(),
-    'puppeteer'
+    puppeteer
   ],
   mode: isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
