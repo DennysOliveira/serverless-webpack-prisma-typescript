@@ -73,11 +73,21 @@ export class Runner {
         });
       });
 
-      const results = await this.crawler.crawl();
+      const time = await this.crawler.crawl();
 
+      const results = await this.crawler.getResults();
 
-      console.log(this.selectors);
-      console.log(this.sitemap);
+      console.log(`Finished running sitemap ${this.sitemap.id} in ${time}ms`);
+
+      const executionResults = await this.prisma.sitemap_result.create({
+        data: {
+          sitemap_id: this.sitemap.id,
+          selector_id: this.selectors[this.selectors.length - 1].id,
+          data: JSON.stringify(results),
+        },
+      })
+
+      console.log(`Created execution result ${executionResults.id} for sitemap ${this.sitemap.id}`)
 
       if (results) {
         return {
