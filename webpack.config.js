@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { puppeteer } from 'puppeteer';
+const puppeteer = require('puppeteer');
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const slsw = require('serverless-webpack')
