@@ -23,7 +23,9 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const promises: Promise<RunResult>[] = [];
 
   sitemaps.forEach((sitemap) => {
-    promises.push(new Runner(sitemap).run());
+    console.log(`Launching runner for sitemap ${sitemap.id}`)
+    const runner = new Runner(sitemap);
+    promises.push(runner.run());
   });
 
   const results = await Promise.allSettled(promises);
