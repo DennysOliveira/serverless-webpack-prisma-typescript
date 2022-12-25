@@ -9,9 +9,11 @@ module.exports = {
   target: 'node',
   stats: 'normal',
   entry: slsw.lib.entries,
+  include: [
+    path.join(__dirname, '.cache', 'puppeteer'),
+  ],
   externals: [
-    nodeExternals(),
-    puppeteer
+    nodeExternals(),    
   ],
   mode: isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
