@@ -29,6 +29,13 @@ provider:
 
 
 functions:
+  info:
+    handler: src/info.handler
+    events:
+      - httpApi:
+          path: /info
+          method: get
+          
   createSitemap: 
     handler: src/sitemap.create
     events:
