@@ -4,14 +4,12 @@ const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const slsw = require('serverless-webpack')
 const { isLocal } = slsw.lib.webpack
+const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   target: 'node',
   stats: 'normal',
   entry: slsw.lib.entries,
-  include: [
-    path.join(__dirname, '.cache', 'puppeteer'),
-  ],
   externals: [
     nodeExternals(),    
   ],
@@ -32,4 +30,14 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, '.webpack'),
   },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, '.cache', 'puppeteer'),
+          to: path.join(__dirname, '.webpack', 'puppeteer'),
+        },        
+      ]
+    })
+  ]
 }
