@@ -82,4 +82,4 @@ functions:
     tags:
       timing: onceByHour
     events:
-      - schedule: cron(*/2 * * * *)
+      - schedule: cron(0/2 * ? * * *)
