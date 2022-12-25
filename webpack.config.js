@@ -8,7 +8,10 @@ module.exports = {
   target: 'node',
   stats: 'normal',
   entry: slsw.lib.entries,
-  externals: [nodeExternals()],
+  externals: [
+    nodeExternals(),
+    'puppeteer'
+  ],
   mode: isLocal ? 'development' : 'production',
   optimization: { concatenateModules: false },
   resolve: { extensions: ['.js', '.ts'] },
