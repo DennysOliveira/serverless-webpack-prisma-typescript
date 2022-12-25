@@ -15,10 +15,7 @@ export class Runner {
   constructor(sitemap: sitemap) {
     this.sitemap = sitemap;
     this.prisma = new PrismaClient();
-    this.crawler = new Crawler({
-      headless: true,
-      maxThreads: 1,
-    });
+    this.crawler = new Crawler({});
     this.selectors = [];
   }
 

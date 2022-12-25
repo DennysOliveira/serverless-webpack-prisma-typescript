@@ -42,12 +42,12 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     },
     data: {
       lastRun: new Date(),
-      nextRun: new Date(new Date().getTime() + 60 * 1000 * 10),
+      nextRun: new Date(new Date().getTime() + 60 * 1000 * 3),
     },
   });
 
-  console.log(`Updated ${updatedSitemaps.count} sitemaps.`)
-  console.log(`Could not run ${rejected.length} sitemaps.`)
+  console.log(`>>> Successfully executed ${fullfilled.length} sitemaps.`)
+  console.log(`>>> Failing execution for ${rejected.length} sitemaps.`)
 
   return APIResponse({
     status: 200,
