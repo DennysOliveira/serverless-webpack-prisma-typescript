@@ -17,6 +17,7 @@ custom:
     includeModules: true
 
 provider:
+  timeout: 30
   name: aws
   runtime: nodejs16.x
   environment:
@@ -78,6 +79,7 @@ functions:
 
   
   sitemapRoutine:
+    timeout: 900
     handler: src/sitemap-routine.handler
     tags:
       timing: onceByHour
