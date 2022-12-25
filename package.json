@@ -11,10 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^4.8.0",
+    "@sparticuz/chromium": "^109.0.0",
     "@types/aws-lambda": "^8.10.109",
-    "chrome-aws-lambda": "^10.1.0",
     "jsonwebtoken": "^9.0.0",
-    "puppeteer": "^19.4.1",
+    "puppeteer-core": "^19.4.1",
     "uuid": "^9.0.0",
     "zod": "^3.20.2"
   },

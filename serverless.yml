@@ -15,9 +15,6 @@ custom:
   webpack:
     packager: npm
     includeModules: true
-    # packagerOptions:
-    #   scripts:
-    #     - prisma generate
 
 provider:
   name: aws
@@ -35,16 +32,13 @@ functions:
       - httpApi:
           path: /info
           method: get
-          
+
   createSitemap: 
     handler: src/sitemap.create
     events:
       - httpApi:
           path: /sitemaps
           method: post
-          response:
-            headers:
-              Content-Type: "'application/json'"
 
   getSitemaps: 
     handler: src/sitemap.findAll

@@ -30,14 +30,4 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, '.webpack'),
   },
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.join(__dirname, '.cache', 'puppeteer'),
-          to: path.join(__dirname, '.webpack', 'puppeteer'),
-        },        
-      ]
-    })
-  ]
 }

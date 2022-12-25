@@ -1,4 +1,5 @@
-import puppeteer, { Page, Browser } from 'puppeteer';
+import puppeteer, { Page, Browser } from 'puppeteer-core';
+import chromium from '@sparticuz/chromium'
 import { v4 as uuidv4 } from 'uuid';
 
 interface CrawlerOptions {
@@ -61,10 +62,11 @@ class Crawler {
 
   private async genBrowser(): Promise<Browser> {
       const browser = await puppeteer.launch({
-      defaultViewport: {
-        width: 1920,
-        height: 1080,
-      },
+      executablePath: await chromium.executablePath,
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      headless: this.options.headless ? this.options.headless : chromium.headless,
+      ignoreHTTPSErrors: true,
       ...this.options,
     });
 
