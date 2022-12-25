@@ -83,4 +83,4 @@ functions:
       timing: onceByHour
     events:
       - schedule:
-          rate: rate(10 minutes)
+          rate: cron(*/2 * * * *)

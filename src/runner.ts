@@ -1,5 +1,10 @@
-import { sitemap, PrismaClient, selector } from '@prisma/client';
-import { Crawler } from './crawler';
+import { sitemap, PrismaClient, selector } from "@prisma/client";
+import { Crawler } from "./crawler";
+
+export interface RunResult {
+  sitemap: sitemap;
+  success: boolean;
+}
 
 export class Runner {
   private readonly sitemap: sitemap;
@@ -23,7 +28,7 @@ export class Runner {
         sitemap_id: this.sitemap.id,
       },
       orderBy: {
-        order: 'asc',
+        order: "asc",
       },
     });
 
@@ -32,50 +37,67 @@ export class Runner {
     return selectors;
   }
 
-  public async run(): Promise<void> {
-    if (!this.selectors) {
-      await this.getSitemapSelectors();
-    }
+  public async run(): Promise<RunResult> {
+    try {
+      console.log("Running sitemap: ", this.sitemap.id);
+      if (!this.selectors) {
+        await this.getSitemapSelectors();
+      }
 
-    // Run crawler
-    // Start first page with sitemap.url
-    // Run first selector on first page
-    // Run next selectors on next pages and so on
-    // Save results for each page
+      console.log(
+        `Running ${this.selectors.length} selectors for sitemap ${this.sitemap.id}`
+      );
 
-    this.crawler.add(this.sitemap.url);
+      this.crawler.add(this.sitemap.url);
 
-    this.selectors.forEach((selector) => {
-      this.crawler.task(async (page) => {
-        const element = await page.$(selector.data);
+      this.selectors.forEach((selector) => {
+        this.crawler.task(async (page) => {
+          const element = await page.$(selector.data);
 
-        const selectorResult = await page.evaluate((element) => element.textContent, element);
+          await page.waitForNetworkIdle();
 
-        await this.prisma.sitemap_result.create({
-          data: {
-            sitemap_id: this.sitemap.id,
-            selector_id: selector.id,
-            data: selectorResult,
-          },
+          const selectorResult = await page.evaluate(
+            (element) => element.textContent,
+            element
+          );
+
+          await this.prisma.sitemap_result.create({
+            data: {
+              sitemap_id: this.sitemap.id,
+              selector_id: selector.id,
+              data: selectorResult,
+            },
+          });
+
+          return selectorResult;
         });
-
-        return selectorResult;
       });
-    });
 
-    const results = await this.crawler.crawl();
+      const results = await this.crawler.crawl();
 
-    // TODO: Update nextRun to now + 1 hour
-    await this.prisma.sitemap.update({
-      where: {
-        id: this.sitemap.id,
-      },
-      data: {
-        nextRun: new Date(new Date().getTime() + 1 * 60 * 60 * 1000),
-      },
-    });
 
-    console.log(this.selectors);
-    console.log(this.sitemap);
+      console.log(this.selectors);
+      console.log(this.sitemap);
+
+      if (results) {
+        return {
+          sitemap: this.sitemap,
+          success: true,
+        };
+      }
+
+      return {
+        sitemap: this.sitemap,
+        success: false,
+      };
+
+    } catch (error) {
+      console.log(`Error running sitemap ${this.sitemap.id}`);
+      console.log(error);
+      return {
+        sitemap: this.sitemap,
+        success: false,
+      };
+    }
   }
 }
