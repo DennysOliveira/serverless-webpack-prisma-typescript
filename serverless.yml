@@ -80,10 +80,10 @@ functions:
   
   sitemapRoutine:
     timeout: 900
-    memorySize: 2048
+    memorySize: 900
     handler: src/sitemap-routine.handler
     tags:
       timing: onceByHour
-    events:
-      - schedule: cron(0/5 * ? * * *) # every 5 minutes
+    # events:
+    #   - schedule: cron(0/5 * ? * * *) # every 5 minutes
       # - schedule: cron(0/5 * ? * * *) # every 5 minutes

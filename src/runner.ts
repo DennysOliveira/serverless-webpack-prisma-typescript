@@ -59,7 +59,7 @@ export class Runner {
 
       this.selectors.forEach((selector) => {
         this.crawler.task(async (page) => {
-          await page.waitForNetworkIdle();
+          
           const pageTitle = await page.title();
 
           return {
