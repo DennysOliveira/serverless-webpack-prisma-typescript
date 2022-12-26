@@ -62,36 +62,28 @@ export class Runner {
       this.selectors.forEach((selector) => {
         this.crawler.task(async (page) => {
           const element = await page.$(selector.data);
+          console.log(`Element`, element);
 
           await page.waitForNetworkIdle();
+          const pageTitle = await page.title();
 
-          const selectorResult = await page.$eval(
-            selector.data,
-            (element) => element.innerHTML
-          )
-
-          await this.prisma.sitemap_result.create({
-            data: {
-              sitemap_id: this.sitemap.id,
-              selector_id: selector.id,
-              data: selectorResult,
-            },
-          });
-
-          return selectorResult;
+          return {
+            pageTitle,
+            element
+          }
         });
       });
 
       const time = await this.crawler.crawl();
 
       const results = await this.crawler.getResults();
+      console.log('Results', results)
 
       console.log(`Finished running sitemap ${this.sitemap.id} in ${time}ms`);
 
       const executionResults = await this.prisma.sitemap_result.create({
         data: {
           sitemap_id: this.sitemap.id,
-          selector_id: 0,
           data: JSON.stringify(results),
         },
       })
