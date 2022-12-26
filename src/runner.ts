@@ -65,10 +65,10 @@ export class Runner {
 
           await page.waitForNetworkIdle();
 
-          const selectorResult = await page.evaluate(
-            (element) => element.textContent,
-            element
-          );
+          const selectorResult = await page.$eval(
+            selector.data,
+            (element) => element.innerHTML
+          )
 
           await this.prisma.sitemap_result.create({
             data: {

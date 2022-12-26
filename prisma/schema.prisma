@@ -1,6 +1,6 @@
 generator client {
-  provider        = "prisma-client-js"  
-  previewFeatures = ["referentialIntegrity"]
+  provider      = "prisma-client-js"
+  relationMode  = "prisma"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -11,40 +11,45 @@ datasource db {
 }
 
 model sitemap {
-  id          Int       @id @default(autoincrement())
-  name        String?   @db.VarChar(50)
-  url         String    @db.VarChar(250)
-  enabled     Boolean?  @default(true)
-  lastRun     DateTime? @map("last_run")
-  nextRun     DateTime  @default(now()) @map("next_run")
-  status      Int       @default(0) 
+  id        Int              @id @default(autoincrement())
+  name      String?          @db.VarChar(50)
+  url       String           @db.VarChar(250)
+  enabled   Boolean?         @default(true)
+  lastRun   DateTime?        @map("last_run")
+  nextRun   DateTime         @default(now()) @map("next_run")
+  status    Int              @default(0)
+  selectors selector[]
+  results   sitemap_result[]
 }
 
 model selector {
-  id                  Int     @id @default(autoincrement())
-  type_id             Int
-  sitemap_id          Int
-  order               Int     @db.TinyInt
-  multiple            Boolean @db.TinyInt
-  data                String  @db.VarChar(250)
-  name                String? @db.VarChar(50)
+  id         Int     @id @default(autoincrement())
+  type_id    Int
+  type       type    @relation(fields: [type_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sitemap_id Int     @db.Int
+  sitemap    sitemap @relation(fields: [sitemap_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  order      Int     @db.TinyInt
+  multiple   Boolean @db.TinyInt
+  data       String  @db.VarChar(250)
+  name       String? @db.VarChar(50)
 
   @@index([id, type_id, sitemap_id])
 }
 
 model type {
-  id       Int     @id @default(autoincrement())
-  element  String  @db.VarChar(45)
-  label    String? @db.VarChar(45)
+  id        Int        @id @default(autoincrement())
+  element   String     @db.VarChar(45)
+  label     String?    @db.VarChar(45)
+  selectors selector[]
 }
 
 model sitemap_result {
-  id            Int     @id @default(autoincrement())
-  sitemap_id    Int
-  selector_id   Int
-  data          Json     @db.Json
-  url           String?  @db.VarChar(250)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  
-  @@index([sitemap_id, selector_id])
+  id         Int      @id @default(autoincrement())
+  sitemap_id Int
+  sitemap    sitemap  @relation(fields: [sitemap_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  data       Json     @db.Json
+  url        String?  @db.VarChar(250)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([sitemap_id])
 }
