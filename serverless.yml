@@ -80,6 +80,7 @@ functions:
   
   sitemapRoutine:
     timeout: 900
+    memorySize: 2048
     handler: src/sitemap-routine.handler
     tags:
       timing: onceByHour

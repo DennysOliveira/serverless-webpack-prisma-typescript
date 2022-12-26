@@ -28,8 +28,6 @@ export class Runner {
         order: "asc",
       }
     }
-    console.log(`getSitemapSelectors query: ${JSON.stringify(query)}`)
-
 
     const selectors = await this.prisma.selector.findMany({
         where: {
@@ -61,15 +59,11 @@ export class Runner {
 
       this.selectors.forEach((selector) => {
         this.crawler.task(async (page) => {
-          const element = await page.$(selector.data);
-          console.log(`Element`, element);
-
           await page.waitForNetworkIdle();
           const pageTitle = await page.title();
 
           return {
             pageTitle,
-            element
           }
         });
       });
