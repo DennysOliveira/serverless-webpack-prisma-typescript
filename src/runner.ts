@@ -60,15 +60,23 @@ export class Runner {
       this.selectors.forEach((selector) => {
         this.crawler.task(async (page) => {
           
-          const pageTitle = await page.title();
+          try {
 
-          return {
-            pageTitle,
+            const pageTitle = await page.title();
+            
+            return {
+              pageTitle,
+            }
+          }catch(error) {
+            console.log(error);
+            return {
+              pageTitle: 'Error',
+            }
           }
         });
       });
 
-      const time = await this.crawler.crawl();
+      await this.crawler.stop();
 
       const results = await this.crawler.getResults();
       console.log('Results', results)

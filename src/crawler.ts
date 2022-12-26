@@ -89,9 +89,16 @@ class Crawler {
 
     const executionTimeInMs = Date.now() - executionBeginning;
 
-    await this.browser.close();
     return executionTimeInMs;
   }
+
+  public async stop(): Promise<void> {
+    if (this.browser) {
+      await this.browser.close();
+      this.browser = null;
+    }
+  }
+
 
   private async launchThread(): Promise<void> {
     const currentThread: string = uuidv4();
