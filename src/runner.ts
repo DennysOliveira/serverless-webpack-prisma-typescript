@@ -30,7 +30,7 @@ export class Runner {
     }
     console.log(`getSitemapSelectors query: ${JSON.stringify(query)}`)
 
-    
+
     const selectors = await this.prisma.selector.findMany({
         where: {
           sitemap_id: this.sitemap.id,
@@ -48,7 +48,7 @@ export class Runner {
   public async run(): Promise<RunResult> {
     try {
       console.log("Running sitemap: ", this.sitemap.id);
-      if (!this.selectors) {
+      if (this.selectors.length === 0) {
         console.log("Getting selectors for sitemap: ", this.sitemap.id);
         await this.getSitemapSelectors();
       }
