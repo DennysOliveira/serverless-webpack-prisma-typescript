@@ -20,13 +20,24 @@ export class Runner {
   }
 
   public async getSitemapSelectors(): Promise<selector[]> {
-    const selectors = await this.prisma.selector.findMany({
+    const query = {
       where: {
         sitemap_id: this.sitemap.id,
       },
       orderBy: {
         order: "asc",
-      },
+      }
+    }
+    console.log(`getSitemapSelectors query: ${JSON.stringify(query)}`)
+
+    
+    const selectors = await this.prisma.selector.findMany({
+        where: {
+          sitemap_id: this.sitemap.id,
+        },
+        orderBy: {
+          order: "asc",
+        },
     });
 
     this.selectors = selectors;
@@ -38,6 +49,7 @@ export class Runner {
     try {
       console.log("Running sitemap: ", this.sitemap.id);
       if (!this.selectors) {
+        console.log("Getting selectors for sitemap: ", this.sitemap.id);
         await this.getSitemapSelectors();
       }
 
