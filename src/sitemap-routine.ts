@@ -28,16 +28,16 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     promises.push(runner.run());
   });
 
-  const results = await Promise.allSettled(promises);
+  const results = await Promise.all(promises);
 
-  const fullfilled = results.filter((result) => result.status === 'fulfilled') as PromiseFulfilledResult<RunResult>[];
-  const rejected = results.filter((result) => result.status === 'rejected') as PromiseRejectedResult[];
+  const passing = results.filter((result) => result.success);
+  const failing = results.filter((result) => !result.success);
 
   // Update sitemaps that did run successfully
   const updatedSitemaps = await prisma.sitemap.updateMany({
     where: {
       id: {
-        in: fullfilled.map((result) => result.value.sitemap.id),
+        in: passing.map((result) => result.sitemap.id),
       },
     },
     data: {
@@ -46,8 +46,8 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     },
   });
 
-  console.log(`>>> Successfully executed ${fullfilled.length} sitemaps.`)
-  console.log(`>>> Failing execution for ${rejected.length} sitemaps.`)
+  console.log(`>>> Successfully executed ${passing.length} sitemaps.`)
+  console.log(`>>> Failing execution for ${failing.length} sitemaps.`)
 
   return APIResponse({
     status: 200,
