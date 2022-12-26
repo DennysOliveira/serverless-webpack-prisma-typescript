@@ -85,3 +85,4 @@ functions:
       timing: onceByHour
     events:
       - schedule: cron(0/5 * ? * * *) # every 5 minutes
+      # - schedule: cron(0/5 * ? * * *) # every 5 minutes

@@ -79,7 +79,7 @@ export class Runner {
       const executionResults = await this.prisma.sitemap_result.create({
         data: {
           sitemap_id: this.sitemap.id,
-          selector_id: this.selectors[this.selectors.length - 1].id,
+          selector_id: 0,
           data: JSON.stringify(results),
         },
       })

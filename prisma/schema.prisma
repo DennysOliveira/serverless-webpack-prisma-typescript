@@ -39,12 +39,12 @@ model type {
 }
 
 model sitemap_result {
-  id          Int     @id @default(autoincrement())
-  sitemap_id  Int
-  selector_id Int
-  data        String    @db.VarChar(250)
-  url         String?   @db.VarChar(250)
-  createdAt  DateTime  @default(now()) @map("created_at")
+  id            Int     @id @default(autoincrement())
+  sitemap_id    Int
+  selector_id   Int
+  data          Json     @db.Json
+  url           String?  @db.VarChar(250)
+  createdAt     DateTime  @default(now()) @map("created_at")
   
   @@index([sitemap_id, selector_id])
 }
