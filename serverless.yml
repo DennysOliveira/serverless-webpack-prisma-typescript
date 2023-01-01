@@ -25,7 +25,7 @@ provider:
 
 layers:
   PrismaClient:
-    path: layers/prisma-client
+    path: ./layers/prisma-client
     
   
 package:
