@@ -23,7 +23,8 @@ jobs:
       - name: Build PrismaClient lambda layer
         run: ./scripts/ci/build-prisma-client-lambda-layer.sh
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload artifact prisma-client-lambda-layer
+        uses: actions/upload-artifact@v2
         with:
           name: prisma-client-lambda-layer
           path: ./layers/prisma-client
@@ -52,7 +53,7 @@ jobs:
       - name: Install production dependencies
         run: npm ci --production
 
-      - name: Download artifact - PrismaClient lambda layer
+      - name: Download artifact prisma-client-lambda-layer
         uses: actions/download-artifact@v2
         with:
           name: prisma-client-lambda-layer
