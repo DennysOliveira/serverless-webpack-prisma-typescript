@@ -76,6 +76,8 @@ export class Runner {
         });
       });
 
+      const time = await this.crawler.crawl();
+
       await this.crawler.stop();
 
       const results = await this.crawler.getResults();
