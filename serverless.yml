@@ -5,6 +5,7 @@ useDotenv: true
 
 plugins:
   - serverless-offline
+  - serverless-typescript
   # - serverless-webpack
   # - serverless-prisma-webpack
 
