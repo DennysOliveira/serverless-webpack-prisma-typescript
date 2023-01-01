@@ -81,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: libs-lambda-layer
-          path: ./layers/libs
+          path: ./layers/lib
 
   build-lambda-functions: 
     name: Build Lambda functions
