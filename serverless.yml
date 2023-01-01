@@ -23,6 +23,10 @@ provider:
     JWT_REFRESH_SECRET: ${param:JWT_REFRESH_SECRET, env:JWT_REFRESH_SECRET, 'refreshSecret'}
     DATABASE_URL: ${param:DATABASE_URL, env:DATABASE_URL, 'mysql://root@127.0.0.1:3309/scraper-api'}
 
+layers:
+  PrismaClient:
+    path: layers/prisma-client
+    
   
 package:
   individually: true
@@ -40,7 +44,9 @@ functions:
       - httpApi:
           path: /info
           method: get
-
+    layers:
+      - PrismaClient
+      
   createSitemap: 
     handler: src/sitemap.create
     events:

@@ -1,0 +1,69 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-prisma-client-layer:
+    name: Build PrismaClient lambda layer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install all dependencies
+        run: npm ci
+
+      - name: Build PrismaClient lambda layer
+        run: ./scripts/ci/build-prisma-client-lambda-layer.sh
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: prisma-client-lambda-layer
+          path: ./layers/prisma-client
+      
+  deploy:
+    name: Deploy Serverless
+    needs: [
+      build-prisma-client-layer
+    ]
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: https://api.example.com
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install production dependencies
+        run: npm ci --production
+
+      - name: Download artifact - PrismaClient lambda layer
+        uses: actions/download-artifact@v2
+        with:
+          name: prisma-client-lambda-layer
+          path: ./layers/prisma-client
+      
+      - name: Unzip lambda layers
+        run: ./scripts/ci/unzip-lambda-layers.sh
+
+      - name: Deploy to serverless
+        uses: serverless/github-action@v3.1
+        with:
+          args: deploy --stage prod --debug
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
