@@ -24,7 +24,7 @@ jobs:
         run: ./scripts/ci/build-node-modules-lambda-layer.sh
 
       - name: Upload artifact node-modules-lambda-layer
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: node-modules-lambda-layer
           path: ./layers/node-modules
@@ -48,7 +48,7 @@ jobs:
         run: ./scripts/ci/build-prisma-client-lambda-layer.sh
 
       - name: Upload artifact prisma-client-lambda-layer
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: prisma-client-lambda-layer
           path: ./layers/prisma-client
@@ -78,7 +78,7 @@ jobs:
         run: ./scripts/ci/build-libs-lambda-layer.sh
 
       - name: Upload artifact libs-lambda-layer
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: libs-lambda-layer
           path: ./layers/lib
@@ -105,7 +105,7 @@ jobs:
         run: npx tsc
 
       - name: Upload artifact lambda-functions
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: lambda-functions
           path: ./build
@@ -135,25 +135,25 @@ jobs:
           node-version: ${{ matrix.node-version }}
       
       - name: Download artifact lambda-functions
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: lambda-functions
           path: ./build
       
       - name: Download artifact node-modules-lambda-layer
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: node-modules-lambda-layer
           path: ./build/layers/node-modules
       
       - name: Download artifact prisma-client-lambda-layer
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: prisma-client-lambda-layer
           path: ./build/layers/prisma-client
 
       - name: Download artifact libs-lambda-layer
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: libs-lambda-layer
           path: ./build/layers/libs
@@ -172,5 +172,6 @@ jobs:
         with:
           args: deploy --stage prod --verbose
         env:
+          SERVICE_ROOT: ./build
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           PRISMA_BINARY_TARGET: rhel-openssl-1.0.x
