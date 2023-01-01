@@ -62,6 +62,9 @@ jobs:
       - name: Unzip lambda layers
         run: ./scripts/ci/unzip-lambda-layers.sh
 
+      - name: Install serverless
+        run: npm install -g serverless
+
       - name: Deploy to serverless
         uses: serverless/github-action@v3.1
         with:

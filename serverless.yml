@@ -60,6 +60,8 @@ functions:
       - httpApi:
           path: /sitemaps
           method: get
+    layers:
+      - PrismaClient
 
   getSitemapById: 
     handler: src/sitemap.findById
