@@ -65,6 +65,6 @@ jobs:
       - name: Deploy to serverless
         uses: serverless/github-action@v3.1
         with:
-          args: deploy --stage prod --debug
+          args: deploy --stage prod --verbose
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
