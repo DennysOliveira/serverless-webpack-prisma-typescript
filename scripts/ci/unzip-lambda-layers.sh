@@ -7,8 +7,8 @@ function unzip_lambda_layers(){
     tar -xzf nodejs.tar.gz
     popd
 
-    echo "Removing $layer.tar.gz"
-    rm layers/$layer/nodejs.tar.gz    
+    # echo "Removing $layer.tar.gz"
+    # rm layers/$layer/nodejs.tar.gz    
   done
   
   echo "Done"
