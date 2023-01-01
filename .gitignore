@@ -106,9 +106,7 @@ dist
 
 .env
 .env.dev
-
 .webpack
-
 chrome
-
 layers
+build

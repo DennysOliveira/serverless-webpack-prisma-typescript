@@ -1,4 +1,4 @@
-function prepare_prisma_lambda_layer() {
+function build_prisma_lambda_layer() {
   echo "Create layers directory if it doesn't exist"
   mkdir -p layers
 
@@ -26,4 +26,4 @@ function prepare_prisma_lambda_layer() {
 
   echo "Done"
 }
-prepare_prisma_lambda_layer
+build_prisma_lambda_layer

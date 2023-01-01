@@ -5,6 +5,30 @@ on:
     branches: [main]
 
 jobs:
+  build-node-modules-lambda-layer:
+    name: Build NodeModules lambda layer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install only production dependencies
+        run: npm ci --production
+
+      - name: Build NodeModules lambda layer
+        run: ./scripts/ci/build-node-modules-lambda-layer.sh
+
+      - name: Upload artifact node-modules-lambda-layer
+        uses: actions/upload-artifact@v2
+        with:
+          name: node-modules-lambda-layer
+          path: ./layers/node-modules
+
   build-prisma-client-layer:
     name: Build PrismaClient lambda layer
     runs-on: ubuntu-latest
@@ -29,10 +53,70 @@ jobs:
           name: prisma-client-lambda-layer
           path: ./layers/prisma-client
       
+  build-libs-lambda-layer:
+    name: Build Libs lambda layer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install all dependencies
+        run: npm ci
+
+      - name: Prepare prisma client
+        run: PRISMA_BINARY_TARGET=rhel-openssl-1.0.x npx prisma generate
+
+      - name: Build project assets
+        run: npx tsc
+
+      - name: Build Libs lambda layer
+        run: ./scripts/ci/build-libs-lambda-layer.sh
+
+      - name: Upload artifact libs-lambda-layer
+        uses: actions/upload-artifact@v2
+        with:
+          name: libs-lambda-layer
+          path: ./layers/libs
+
+  build-lambda-functions: 
+    name: Build Lambda functions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install all dependencies
+        run: npm ci
+
+      - name: Prepare prisma client
+        run: PRISMA_BINARY_TARGET=rhel-openssl-1.0.x npx prisma generate
+
+      - name: Build project assets
+        run: npx tsc
+
+      - name: Upload artifact lambda-functions
+        uses: actions/upload-artifact@v2
+        with:
+          name: lambda-functions
+          path: ./build
+
   deploy:
     name: Deploy Serverless
     needs: [
-      build-prisma-client-layer
+      build-node-modules-lambda-layer,
+      build-prisma-client-layer,
+      build-libs-lambda-layer,
+      build-lambda-functions
     ]
     runs-on: ubuntu-latest
     environment:
@@ -49,21 +133,39 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Install production dependencies
-        run: npm ci --production
-
+      
+      - name: Download artifact lambda-functions
+        uses: actions/download-artifact@v2
+        with:
+          name: lambda-functions
+          path: ./build
+      
+      - name: Download artifact node-modules-lambda-layer
+        uses: actions/download-artifact@v2
+        with:
+          name: node-modules-lambda-layer
+          path: ./build/layers/node-modules
+      
       - name: Download artifact prisma-client-lambda-layer
         uses: actions/download-artifact@v2
         with:
           name: prisma-client-lambda-layer
-          path: ./layers/prisma-client
+          path: ./build/layers/prisma-client
+
+      - name: Download artifact libs-lambda-layer
+        uses: actions/download-artifact@v2
+        with:
+          name: libs-lambda-layer
+          path: ./build/layers/libs
       
       - name: Unzip lambda layers
         run: ./scripts/ci/unzip-lambda-layers.sh
 
       - name: Install serverless
         run: npm install -g serverless
+      
+      - name: Move serverless config
+        run: mv serverless.yml ./build/serverless.yml
 
       - name: Deploy to serverless
         uses: serverless/github-action@v3.1
@@ -71,3 +173,4 @@ jobs:
           args: deploy --stage prod --verbose
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          PRISMA_BINARY_TARGET: rhel-openssl-1.0.x
