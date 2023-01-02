@@ -30,30 +30,21 @@ layers:
     path: layers/node-modules
   Libs:
     path: layers/libs
-        
-    
   
 package:
   individually: true
-  # patterns:
-  #   - '!node_modules/.prisma/client/libquery_engine-*'
-  #   - 'node_modules/.prisma/client/libquery_engine-rhel-*'  
-  #   - '!node_modules/prisma/libquery_engine-*'
-  #   - '!node_modules/@prisma/engines/**'
-
 
 functions:
   info:
     handler: info.handler
-    # layers:
-    #   - !Ref NodeModulesLambdaLayer
-    #   - !Ref PrismaClientLambdaLayer
-      # - !Ref LibsLambdaLayer
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
     events:
       - httpApi:
           path: /info
           method: get
-        
       
   createSitemap: 
     handler: sitemap.create
@@ -61,6 +52,10 @@ functions:
       - httpApi:
           path: /sitemaps
           method: post
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
 
   getSitemaps: 
     handler: sitemap.findAll
@@ -79,6 +74,10 @@ functions:
       - httpApi:
           path: /sitemaps/{id}
           method: get
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
 
   getSitemapResults:
     handler: sitemap.getSitemapResults
@@ -86,7 +85,10 @@ functions:
       - httpApi:
           path: /sitemaps/{id}/results
           method: get
-          
+    layers:
+    - !Ref NodeModulesLambdaLayer
+    - !Ref PrismaClientLambdaLayer
+    - !Ref LibsLambdaLayer    
 
   getSitemapStatus:
     handler: sitemap.getSitemapStatus
@@ -94,6 +96,10 @@ functions:
       - httpApi:
           path: /sitemaps/{id}/status
           method: get
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
 
   updateOrCreateSelector:
     handler: selector.updateOrCreate
@@ -101,6 +107,10 @@ functions:
       - httpApi:
           path: /sitemaps/{id}/selectors
           method: put
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
   
   sitemapRoutine:
     timeout: 900
@@ -108,6 +118,10 @@ functions:
     handler: sitemap-routine.handler
     tags:
       timing: onceByHour
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
     # events:
     #   - schedule: cron(0/5 * ? * * *) # every 5 minutes
       # - schedule: cron(0/5 * ? * * *) # every 5 minutes
