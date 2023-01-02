@@ -20,24 +20,17 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   // Filter size of sitemaps or quantity of sitemaps that should be run by this minute execution (future feature)
 
   // For each sitemap, boot up an asynchronous Runner
-  const promises: Promise<RunResult>[] = [];
+  const runner = new Runner(sitemaps[0]);
 
-  sitemaps.forEach((sitemap) => {
-    console.log(`Launching runner for sitemap ${sitemap.id}`)
-    const runner = new Runner(sitemap);
-    promises.push(runner.run());
-  });
+  const result = await runner.run();
 
-  const results = await Promise.all(promises);
-
-  const passing = results.filter((result) => result.success);
-  const failing = results.filter((result) => !result.success);
+  console.log(result);
 
   // Update sitemaps that did run successfully
   const updatedSitemaps = await prisma.sitemap.updateMany({
     where: {
       id: {
-        in: passing.map((result) => result.sitemap.id),
+        in: [sitemaps[0].id]
       },
     },
     data: {
@@ -46,9 +39,9 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     },
   });
 
-  console.log(`>>> Successfully executed ${passing.length} sitemaps.`)
-  console.log(`>>> Failing execution for ${failing.length} sitemaps.`)
 
+  console.log(`Updated ${updatedSitemaps.count} sitemaps.`)
+  
   return APIResponse({
     status: 200,
     data: updatedSitemaps
