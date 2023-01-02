@@ -164,6 +164,9 @@ jobs:
       - name: Install serverless
         run: npm install -g serverless
       
+      - name: Install serverless plugins
+        run: npm install serverless-offline
+      
       - name: Move serverless config
         run: mv serverless.yml ./build/serverless.yml
 
