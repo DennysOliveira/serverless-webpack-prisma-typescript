@@ -170,7 +170,7 @@ jobs:
       - name: Deploy to serverless
         uses: serverless/github-action@v3.1
         with:
-          args: deploy --stage prod --verbose
+          args: -c "cd ./build && serverless deploy --stage prod --verbose"
         env:
           SERVICE_ROOT: ./build
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
