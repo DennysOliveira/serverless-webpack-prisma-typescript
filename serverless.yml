@@ -64,6 +64,10 @@ functions:
 
   getSitemaps: 
     handler: sitemap.findAll
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref LibsLambdaLayer
+      - !Ref PrismaClientLambdaLayer
     events:
       - httpApi:
           path: /sitemaps
