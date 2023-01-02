@@ -11,7 +11,7 @@ function build_prisma_lambda_layer() {
 
   echo "Copying files..."	
   cp -r node_modules/.prisma/client layers/prisma-client/nodejs/node_modules/.prisma/client
-  cp -r node_modules/@prisma layers/prisma-client/nodejs/node_modules/@prisma
+  cp -r node_modules/@prisma layers/prisma-client/nodejs/node_modules
 
   echo "Compressing layer..."
   pushd layers/prisma-client && tar -zcf /tmp/nodejs.tar.gz . && mv /tmp/nodejs.tar.gz .

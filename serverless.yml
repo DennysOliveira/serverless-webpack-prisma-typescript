@@ -45,10 +45,10 @@ package:
 functions:
   info:
     handler: info.handler
-    layers:
-      - !Ref NodeModulesLambdaLayer
-      - !Ref LibsLambdaLayer
-      - !Ref PrismaClientLambdaLayer
+    # layers:
+    #   - !Ref NodeModulesLambdaLayer
+    #   - !Ref PrismaClientLambdaLayer
+      # - !Ref LibsLambdaLayer
     events:
       - httpApi:
           path: /info
