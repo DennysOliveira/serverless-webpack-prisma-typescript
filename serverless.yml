@@ -49,7 +49,6 @@ functions:
           method: get
       
   createSitemap: 
-    handler: src/sitemap.create
     handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap.create
     events:
       - httpApi:
