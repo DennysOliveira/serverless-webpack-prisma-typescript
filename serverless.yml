@@ -44,7 +44,7 @@ package:
 
 functions:
   info:
-    handler: src/info.handler
+    handler: info.handler
     layers:
       - !Ref NodeModulesLambdaLayer
       - !Ref LibsLambdaLayer
@@ -56,28 +56,28 @@ functions:
         
       
   createSitemap: 
-    handler: src/sitemap.create
+    handler: sitemap.create
     events:
       - httpApi:
           path: /sitemaps
           method: post
 
   getSitemaps: 
-    handler: src/sitemap.findAll
+    handler: sitemap.findAll
     events:
       - httpApi:
           path: /sitemaps
           method: get    
 
   getSitemapById: 
-    handler: src/sitemap.findById
+    handler: sitemap.findById
     events:
       - httpApi:
           path: /sitemaps/{id}
           method: get
 
   getSitemapResults:
-    handler: src/sitemap.getSitemapResults
+    handler: sitemap.getSitemapResults
     events:
       - httpApi:
           path: /sitemaps/{id}/results
@@ -85,14 +85,14 @@ functions:
           
 
   getSitemapStatus:
-    handler: src/sitemap.getSitemapStatus
+    handler: sitemap.getSitemapStatus
     events:
       - httpApi:
           path: /sitemaps/{id}/status
           method: get
 
   updateOrCreateSelector:
-    handler: src/selector.updateOrCreate
+    handler: selector.updateOrCreate
     events:
       - httpApi:
           path: /sitemaps/{id}/selectors
@@ -101,7 +101,7 @@ functions:
   sitemapRoutine:
     timeout: 900
     memorySize: 900
-    handler: src/sitemap-routine.handler
+    handler: sitemap-routine.handler
     tags:
       timing: onceByHour
     # events:
