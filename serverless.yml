@@ -15,7 +15,7 @@ plugins:
 #     includeModules: true
 
 provider:
-  timeout: 30
+  timeout: 29
   name: aws
   runtime: nodejs16.x
   environment:
@@ -37,7 +37,7 @@ package:
   individually: true
   # patterns:
   #   - '!node_modules/.prisma/client/libquery_engine-*'
-  #   - 'node_modules/.prisma/client/libquery_engine-rhel-*'
+  #   - 'node_modules/.prisma/client/libquery_engine-rhel-*'  
   #   - '!node_modules/prisma/libquery_engine-*'
   #   - '!node_modules/@prisma/engines/**'
 
@@ -51,8 +51,8 @@ functions:
       - !Ref PrismaClientLambdaLayer
     events:
       - httpApi:
-        path: /info
-        method: get
+          path: /info
+          method: get
         
       
   createSitemap: 
@@ -67,9 +67,7 @@ functions:
     events:
       - httpApi:
           path: /sitemaps
-          method: get
-    layers:
-      - PrismaClient
+          method: get    
 
   getSitemapById: 
     handler: src/sitemap.findById
@@ -99,7 +97,6 @@ functions:
       - httpApi:
           path: /sitemaps/{id}/selectors
           method: put
-
   
   sitemapRoutine:
     timeout: 900
