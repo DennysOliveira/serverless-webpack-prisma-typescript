@@ -168,7 +168,7 @@ jobs:
         run: npm install serverless-offline
       
       - name: Move serverless config
-        run: mv serverless.prod.yml ./build/serverless.yml
+        run: mv serverless.yml ./build/serverless.yml
 
       - name: Deploy to serverless
         uses: serverless/github-action@v3.1
