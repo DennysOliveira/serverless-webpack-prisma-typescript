@@ -9,20 +9,22 @@ plugins:
   # - serverless-webpack
   # - serverless-prisma-webpack
 
-# custom:
-#   webpack:
-#     packager: npm
-#     includeModules: true
-
 provider:
   timeout: 29
   name: aws
   runtime: nodejs16.x
+  stage: 'dev'
   environment:
     JWT_SECRET: ${param:JWT_SECRET, env:JWT_SECRET, 'secret'}
     JWT_REFRESH_SECRET: ${param:JWT_REFRESH_SECRET, env:JWT_REFRESH_SECRET, 'refreshSecret'}
     DATABASE_URL: ${param:DATABASE_URL, env:DATABASE_URL, 'mysql://root@127.0.0.1:3309/scraper-api'}
 
+custom:
+  stage: ${opt:stage, self:provider.stage, 'dev'}
+  handlerPrefix:
+    dev: 'src/'
+    prod: ''
+    
 layers:
   PrismaClient:
     path: layers/prisma-client
@@ -36,7 +38,7 @@ package:
 
 functions:
   info:
-    handler: info.handler
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}info.handler
     layers:
       - !Ref NodeModulesLambdaLayer
       - !Ref PrismaClientLambdaLayer
@@ -47,7 +49,8 @@ functions:
           method: get
       
   createSitemap: 
-    handler: sitemap.create
+    handler: src/sitemap.create
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap.create
     events:
       - httpApi:
           path: /sitemaps
@@ -58,7 +61,7 @@ functions:
       - !Ref LibsLambdaLayer
 
   getSitemaps: 
-    handler: sitemap.findAll
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.findAll    
     layers:
       - !Ref NodeModulesLambdaLayer
       - !Ref LibsLambdaLayer
@@ -69,7 +72,7 @@ functions:
           method: get    
 
   getSitemapById: 
-    handler: sitemap.findById
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.findById
     events:
       - httpApi:
           path: /sitemaps/{id}
@@ -80,7 +83,7 @@ functions:
       - !Ref LibsLambdaLayer
 
   getSitemapResults:
-    handler: sitemap.getSitemapResults
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.getSitemapResults
     events:
       - httpApi:
           path: /sitemaps/{id}/results
@@ -91,7 +94,7 @@ functions:
     - !Ref LibsLambdaLayer    
 
   getSitemapStatus:
-    handler: sitemap.getSitemapStatus
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.getSitemapStatus
     events:
       - httpApi:
           path: /sitemaps/{id}/status
@@ -102,7 +105,7 @@ functions:
       - !Ref LibsLambdaLayer
 
   updateOrCreateSelector:
-    handler: selector.updateOrCreate
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}selector.updateOrCreate
     events:
       - httpApi:
           path: /sitemaps/{id}/selectors
@@ -115,7 +118,7 @@ functions:
   sitemapRoutine:
     timeout: 900
     memorySize: 900
-    handler: sitemap-routine.handler
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap-routine.handler
     tags:
       timing: onceByHour
     layers:

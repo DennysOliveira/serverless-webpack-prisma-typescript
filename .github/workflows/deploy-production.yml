@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-node-modules-lambda-layer:
-    name: Build NodeModules lambda layer
+    name: Build node_modules lambda layer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
           path: ./layers/node-modules
 
   build-prisma-client-layer:
-    name: Build PrismaClient lambda layer
+    name: Build prisma client lambda layer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -54,7 +54,7 @@ jobs:
           path: ./layers/prisma-client
       
   build-libs-lambda-layer:
-    name: Build Libs lambda layer
+    name: Build shared libraries lambda layer
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -84,7 +84,7 @@ jobs:
           path: ./layers/lib
 
   build-lambda-functions: 
-    name: Build Lambda functions
+    name: Build all lambda functions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -161,14 +161,14 @@ jobs:
       - name: Unzip lambda layers
         run: ./scripts/ci/unzip-lambda-layers.sh
 
-      - name: Install serverless
+      - name: Install serverless cli
         run: npm install -g serverless
       
-      - name: Install serverless plugins
+      - name: Install required serverless plugins
         run: npm install serverless-offline
       
       - name: Move serverless config
-        run: mv serverless.yml ./build/serverless.yml
+        run: mv serverless.prod.yml ./build/serverless.yml
 
       - name: Deploy to serverless
         uses: serverless/github-action@v3.1
