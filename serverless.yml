@@ -60,7 +60,7 @@ functions:
       - !Ref LibsLambdaLayer
 
   getSitemaps: 
-    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.findAll    
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap.findAll    
     layers:
       - !Ref NodeModulesLambdaLayer
       - !Ref LibsLambdaLayer
@@ -71,7 +71,7 @@ functions:
           method: get    
 
   getSitemapById: 
-    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.findById
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap.findById
     events:
       - httpApi:
           path: /sitemaps/{id}
@@ -82,7 +82,7 @@ functions:
       - !Ref LibsLambdaLayer
 
   getSitemapResults:
-    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.getSitemapResults
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap.getSitemapResults
     events:
       - httpApi:
           path: /sitemaps/{id}/results
@@ -93,7 +93,7 @@ functions:
     - !Ref LibsLambdaLayer    
 
   getSitemapStatus:
-    handler: ${self:custom.handlerPrefix.${self:custom.stage}sitemap.getSitemapStatus
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap.getSitemapStatus
     events:
       - httpApi:
           path: /sitemaps/{id}/status
