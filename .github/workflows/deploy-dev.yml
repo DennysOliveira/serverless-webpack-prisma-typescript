@@ -171,7 +171,7 @@ jobs:
         uses: serverless/github-action@v3.1
         with:
           args: -c "cd ./build && serverless deploy --stage prod --verbose"
+          entrypoint: /bin/sh
         env:
-          SERVICE_ROOT: ./build
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           PRISMA_BINARY_TARGET: rhel-openssl-1.0.x
