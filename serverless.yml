@@ -1,13 +1,9 @@
-org: scraperapi
+# org: scraperapi
 app: scraper-api
 service: crawler
 useDotenv: true
 
-plugins:
-  - serverless-offline
-  # - serverless-plugin-typescript
-  # - serverless-webpack
-  # - serverless-prisma-webpack
+plugins: ${self:custom.pluginsConfig.${self:custom.stage}}
 
 provider:
   timeout: 29
@@ -24,6 +20,12 @@ custom:
   handlerPrefix:
     dev: 'src/'
     prod: ''
+  pluginsConfig:
+    dev:
+      - serverless-offline
+      - serverless-plugin-typescript
+    prod:
+      - serverless-offline
     
 layers:
   PrismaClient:

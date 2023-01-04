@@ -61,13 +61,15 @@ class Crawler {
   }
 
   private async genBrowser(): Promise<Browser> {
-      const browser = await puppeteer.launch({
+    console.log('Generating chrome from', await chromium.executablePath);
+
+    const browser = await puppeteer.launch({
+      ...this.options,
       executablePath: await chromium.executablePath,
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       headless: this.options.headless ? this.options.headless : chromium.headless,
       ignoreHTTPSErrors: true,
-      ...this.options,
     });
 
     return browser;

@@ -2,8 +2,38 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
 import { Runner, RunResult } from './runner';
 import { APIResponse } from './helpers/response';
+import { Crawler } from './crawler';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 
 const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  const executablePath = await chromium.executablePath;
+
+  const browser = await puppeteer.launch({
+    executablePath,
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    headless: chromium.headless,
+  });
+
+  const page = await browser.newPage();
+
+  await page.goto('https://www.google.com');
+
+  const title = await page.title();
+
+  console.log(title);
+
+  await browser.close();
+
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Hello from Lambda!',
+      title,
+    }),
+  }
   const prisma = new PrismaClient();
 
   // Get Sitemaps that nextRun is less than now`
