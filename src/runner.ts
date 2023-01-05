@@ -62,6 +62,14 @@ export class Runner {
           try {
             const pageTitle = await page.title();
             
+            const result = await this.prisma.sitemap_result.create({
+              data: {
+                sitemap_id: this.sitemap.id,
+                selector_id: selector.id,
+                data: JSON.stringify(pageTitle),
+              },
+            })
+
             return {
               pageTitle,
             }
@@ -83,14 +91,6 @@ export class Runner {
 
       console.log(`Finished running sitemap ${this.sitemap.id} in ${time}ms`);
 
-      const executionResults = await this.prisma.sitemap_result.create({
-        data: {
-          sitemap_id: this.sitemap.id,
-          data: JSON.stringify(results),
-        },
-      })
-
-      console.log(`Created execution result ${executionResults.id} for sitemap ${this.sitemap.id}`)
 
       if (results) {
         return {
