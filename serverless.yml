@@ -118,7 +118,9 @@ functions:
   
   sitemapRoutine:
     timeout: 900
-    memorySize: 900
+    memorySize: 2048
+    maximumEventAge: 1200
+    maximumRetryAttempts: 0
     handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap-routine.handler
     tags:
       timing: onceByHour
