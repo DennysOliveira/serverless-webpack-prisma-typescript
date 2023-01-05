@@ -1,4 +1,4 @@
-# org: scraperapi
+org: scraperapi
 app: scraper-api
 service: crawler
 useDotenv: true
