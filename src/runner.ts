@@ -59,9 +59,7 @@ export class Runner {
 
       this.selectors.forEach((selector) => {
         this.crawler.task(async (page) => {
-          
           try {
-
             const pageTitle = await page.title();
             
             return {

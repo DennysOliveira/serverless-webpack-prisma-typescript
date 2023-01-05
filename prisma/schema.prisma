@@ -32,8 +32,11 @@ model selector {
   multiple   Boolean @db.TinyInt
   data       String  @db.VarChar(250)
   name       String? @db.VarChar(50)
+  sitemap_result sitemap_result[]
 
-  @@index([id, type_id, sitemap_id])
+  @@index([id])
+  @@index([sitemap_id])
+  @@index([type_id])
 }
 
 model type {
@@ -44,12 +47,15 @@ model type {
 }
 
 model sitemap_result {
-  id         Int      @id @default(autoincrement())
-  sitemap_id Int
-  sitemap    sitemap  @relation(fields: [sitemap_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  data       Json     @db.Json
-  url        String?  @db.VarChar(250)
-  createdAt  DateTime @default(now()) @map("created_at")
+  id          Int      @id @default(autoincrement())
+  sitemap_id  Int
+  sitemap     sitemap  @relation(fields: [sitemap_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  selector_id Int     
+  selector    selector @relation(fields: [selector_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  data        Json     @db.Json
+  url         String?  @db.VarChar(250)
+  createdAt   DateTime @default(now()) @map("created_at")
 
   @@index([sitemap_id])
+  @@index([selector_id])
 }
