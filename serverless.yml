@@ -105,6 +105,28 @@ functions:
       - !Ref PrismaClientLambdaLayer
       - !Ref LibsLambdaLayer
 
+  enableSitemap:
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap/enableSitemap.handler
+    events:
+      - httpApi:
+          path: /sitemaps/{id}/enable
+          method: post
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
+
+  disableSitemap:
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap/disableSitemap.handler
+    events:
+      - httpApi:
+          path: /sitemaps/{id}/disable
+          method: post
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
+
   updateOrCreateSelector:
     handler: ${self:custom.handlerPrefix.${self:custom.stage}}selector.updateOrCreate
     events:
