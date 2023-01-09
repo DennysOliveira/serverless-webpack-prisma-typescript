@@ -28,6 +28,7 @@ jobs:
         with:
           name: node-modules-lambda-layer
           path: ./layers/node-modules
+          retention-days: 3
 
   build-prisma-client-layer:
     name: Build prisma client lambda layer
@@ -52,6 +53,8 @@ jobs:
         with:
           name: prisma-client-lambda-layer
           path: ./layers/prisma-client
+          retention-days: 3
+
       
   build-libs-lambda-layer:
     name: Build shared libraries lambda layer
@@ -82,6 +85,7 @@ jobs:
         with:
           name: libs-lambda-layer
           path: ./layers/lib
+          retention-days: 3
 
   build-lambda-functions: 
     name: Build all lambda functions
@@ -109,6 +113,7 @@ jobs:
         with:
           name: lambda-functions
           path: ./build
+          retention-days: 3
 
   deploy:
     name: Deploy serverless
