@@ -1,39 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
-import { Runner, RunResult } from './runner';
+import { Runner, RunResult } from './libs/runner';
 import { APIResponse } from './helpers/response';
-import { Crawler } from './crawler';
-import puppeteer from 'puppeteer-core';
-import chromium from '@sparticuz/chromium';
+
 
 const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const executablePath = await chromium.executablePath;
 
-  const browser = await puppeteer.launch({
-    executablePath,
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    headless: chromium.headless,
-  });
-
-  const page = await browser.newPage();
-
-  await page.goto('https://www.google.com');
-
-  const title = await page.title();
-
-  console.log(title);
-
-  await browser.close();
-
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Hello from Lambda!',
-      title,
-    }),
-  }
   const prisma = new PrismaClient();
 
   // Get Sitemaps that nextRun is less than now`
@@ -47,16 +19,15 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   
   console.log(`Found ${sitemaps.length} sitemaps to execute.`)
 
-  // Filter size of sitemaps or quantity of sitemaps that should be run by this minute execution (future feature)
-
+  // For now, each invocation will only run one sitemap - so we grab the oldest updated sitemap
   // For each sitemap, boot up an asynchronous Runner
   const runner = new Runner(sitemaps[0]);
 
   const result = await runner.run();
 
-  console.log(result);
+  console.log(`Execution of sitemap ${sitemaps[0].id} completed:`)
+  console.log(JSON.stringify(result, null, 2));
 
-  // Update sitemaps that did run successfully
   const updatedSitemaps = await prisma.sitemap.updateMany({
     where: {
       id: {
@@ -65,13 +36,10 @@ const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     },
     data: {
       lastRun: new Date(),
-      nextRun: new Date(new Date().getTime() + 60 * 1000 * 3),
+      nextRun: new Date(new Date().getTime() + 60 * 1000 * 60 * 12), // 12 hours from now
     },
   });
 
-
-  console.log(`Updated ${updatedSitemaps.count} sitemaps.`)
-  
   return APIResponse({
     status: 200,
     data: updatedSitemaps
