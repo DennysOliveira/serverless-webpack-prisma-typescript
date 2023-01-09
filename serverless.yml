@@ -126,6 +126,17 @@ functions:
       - !Ref NodeModulesLambdaLayer
       - !Ref PrismaClientLambdaLayer
       - !Ref LibsLambdaLayer
+    
+  snapshotSitemap:
+    handler: ${self:custom.handlerPrefix.${self:custom.stage}}sitemap/snapshotSitemap.handler
+    events:
+      - httpApi:
+          path: /sitemaps/{id}/snapshot
+          method: post
+    layers:
+      - !Ref NodeModulesLambdaLayer
+      - !Ref PrismaClientLambdaLayer
+      - !Ref LibsLambdaLayer
 
   updateOrCreateSelector:
     handler: ${self:custom.handlerPrefix.${self:custom.stage}}selector.updateOrCreate
