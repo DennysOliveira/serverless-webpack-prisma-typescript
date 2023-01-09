@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import { SelectorTypes } from './constants';
-import { APIResponse } from './helpers/response';
+import { APIResponse } from '@libs/response';
 
 interface DBSelector {
   id: number;

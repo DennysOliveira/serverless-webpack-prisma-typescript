@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
-import { APIResponse } from './helpers/response';
+import { APIResponse } from '@libs/response';
 
 const create = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // receives a name and url

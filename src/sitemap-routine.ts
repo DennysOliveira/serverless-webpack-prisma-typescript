@@ -1,7 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
 import { Runner, RunResult } from './libs/runner';
-import { APIResponse } from './helpers/response';
+import { APIResponse } from '@libs/response';
+
 
 
 const sitemapRoutine = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { PrismaClient } from '@prisma/client';
-import { APIResponse } from 'src/helpers/response';
+import { APIResponse } from '@libs/response';
 
 
 const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
