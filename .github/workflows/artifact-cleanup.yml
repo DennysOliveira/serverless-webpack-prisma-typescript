@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: kolpav/purge-artifacts-action@v1
         with:
-          token: $
+          token: ${{secrets.GH_TOKEN}}}
           expire-in: 0
           # expire-in: 7days # Set this to 0 to delete all artifacts
