@@ -178,3 +178,31 @@ jobs:
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           PRISMA_BINARY_TARGET: rhel-openssl-1.0.x
+  
+  clear-artifacts:
+    name: Clear artifacts
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Delete node-modules-lambda-layer artifact
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: node-modules-lambda-layer
+      
+      - name: Delete prisma-client-lambda-layer artifact
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: prisma-client-lambda-layer
+    
+      - name: Delete libs-lambda-layer artifact
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: libs-lambda-layer
+
+      - name: Delete lambda-functions artifact
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: lambda-functions
