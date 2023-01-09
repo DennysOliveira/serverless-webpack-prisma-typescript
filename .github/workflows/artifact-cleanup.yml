@@ -1,7 +1,7 @@
 name: 'Daily artifact cleanup'
 on:
   schedule:
-    - cron: '0/5 * * * *' # every 5 minutes
+    - cron: '*/2 * * * *' # every 2 minutes
     # - cron: '0 1 * * *' # every night at 1 am UTC
 
 jobs:
